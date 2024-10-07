@@ -1,6 +1,5 @@
 # FISTML_CS_v0.0
 
-hi
 Facial Recognition Project
 This project is a facial recognition system developed in Visual Studio as part of a software engineering course.
 
@@ -20,7 +19,7 @@ Steps to install Git: Go to the official Git website. Download the appropriate v
 Cloning the Repository
 To clone the repository, use the following command in your terminal or command line:
 
-git clone https://github.com/jasferdelacruz/FISTML.git
+git clone 
 
 Making Changes and Pull Requests
 To contribute to this project:
