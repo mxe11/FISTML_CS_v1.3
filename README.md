@@ -1,9 +1,11 @@
-# Facial Identification System Through Machine Learning (FISTML) - v1.0
+# Facial Identification System Through Machine Learning (FISTML) - v1.1
 
 ## Overview
 
 FISTML is a facial recognition system developed using Visual Studio and .NET Framework with EmguCV for face detection and recognition. It detects faces, stores reference images in a SQL database, and identifies individuals based on stored data. The system is designed for integration into applications like security systems and personalized user experiences.
-
+## Update (1.1)
+- **Multiple Registration:** Can Save or Register Multiple Users in one session.
+  
 ## Features
 
 - **Face Detection:** Detects human faces in images or live video streams.
