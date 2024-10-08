@@ -189,6 +189,14 @@ namespace FISTML_CS_v0._0
         {
             if (_currentFrame != null)
             {
+                string name = textBox1.Text;
+
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    MessageBox.Show("Please enter a name.");
+                    return;
+                }
+
                 var grayFrame = _currentFrame.Convert<Gray, Byte>();
                 var faces = _faceCascade.DetectMultiScale(grayFrame, 1.1, 10, Size.Empty);
 
@@ -196,35 +204,37 @@ namespace FISTML_CS_v0._0
                 {
                     var largestFace = faces.OrderByDescending(f => f.Width * f.Height).First();
 
-                    // Capture 5 images
+                    // Capture 5 images per user
                     for (int i = 0; i < 5; i++)
                     {
-                        if (_imageCounter < 5)
+                        var faceImage = _currentFrame.GetSubRect(largestFace)
+                                          .Convert<Gray, Byte>()
+                                          .Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
+
+                        pictureBox2.Image = faceImage.ToBitmap();
+
+                        string faceFileName = $"{_trainingDataPath}/{name}_{_imageCounter}.jpg";
+                        faceImage.Save(faceFileName);
+
+                        // Save the image path to the database
+                        InsertImagePathToDB(name, faceFileName);
+
+                        // Add unique label for new user
+                        if (!_labelNames.Values.Contains(name))
                         {
-                            var faceImage = _currentFrame.GetSubRect(largestFace)
-                                              .Convert<Gray, Byte>()
-                                              .Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
-
-                            pictureBox2.Image = faceImage.ToBitmap();
-
-                            string name = textBox1.Text;
-                            string faceFileName = $"{_trainingDataPath}/{name}_{_imageCounter}.jpg";
-                            faceImage.Save(faceFileName);
-
-                            // Save the image path to the database
-                            InsertImagePathToDB(name, faceFileName);
-
-                            _trainingImages.Add(faceImage);
-                            _labels.Add(_labels.Count);
-                            _labelNames[_labels.Count - 1] = name;
-                            _imageCounter++;
-
-                            await Task.Delay(50);  // Short delay between captures
+                            _labelNames[_labels.Count] = name;  // Ensure unique labels for new users
                         }
+
+                        _trainingImages.Add(faceImage);
+                        _labels.Add(_labels.Count);  // Increment label counter correctly
+                        _imageCounter++;
+
+                        await Task.Delay(50);  // Short delay between captures
                     }
 
                     try
                     {
+                        // Train the recognizer
                         VectorOfMat imageVec = new VectorOfMat();
                         foreach (var img in _trainingImages)
                         {
@@ -239,7 +249,12 @@ namespace FISTML_CS_v0._0
 
                         _faceRecognizer.Train(imageVec, labelMatrix);
                         SaveModel();  // Save the trained model
+
                         MessageBox.Show("Face capture completed and model retrained.");
+
+                        // Reset image counter for the next user
+                        _imageCounter = 0;
+                        textBox1.Clear();  // Clear the name input for the next user
                     }
                     catch (Exception ex)
                     {
@@ -252,6 +267,8 @@ namespace FISTML_CS_v0._0
                 }
             }
         }
+
+
         private void LoadTrainingDataFromDB()
         {
             // Clear existing training data
@@ -339,7 +356,14 @@ namespace FISTML_CS_v0._0
                     // Check if the label is valid and the distance is within the threshold
                     if (result.Label != -1 && result.Distance < 50)  // Adjust the distance threshold as needed
                     {
-                        textBox2.Text = _labelNames[result.Label];  // Display the name of the recognized person
+                        if (_labelNames.ContainsKey(result.Label))
+                        {
+                            textBox2.Text = _labelNames[result.Label];  // Display the name of the recognized person
+                        }
+                        else
+                        {
+                            MessageBox.Show("Person unknown. Please register first.");
+                        }
                     }
                     else
                     {
@@ -353,6 +377,7 @@ namespace FISTML_CS_v0._0
                 }
             }
         }
+
 
 
 
