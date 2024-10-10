@@ -187,6 +187,8 @@ namespace FISTML_CS_v0._0
 
         private async void button2_Click(object sender, EventArgs e)
         {
+
+            ResetRecognizer();
             if (_currentFrame != null)
             {
                 string name = textBox1.Text;
@@ -205,7 +207,7 @@ namespace FISTML_CS_v0._0
                     var largestFace = faces.OrderByDescending(f => f.Width * f.Height).First();
 
                     // Capture 5 images per user
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         var faceImage = _currentFrame.GetSubRect(largestFace)
                                           .Convert<Gray, Byte>()
@@ -248,13 +250,10 @@ namespace FISTML_CS_v0._0
                         }
 
                         _faceRecognizer.Train(imageVec, labelMatrix);
-                        SaveModel();  // Save the trained model
+
+                        SaveAndReloadModel();  // Save and reload the model after training
 
                         MessageBox.Show("Face capture completed and model retrained.");
-
-                        // Reset image counter for the next user
-                        _imageCounter = 0;
-                        textBox1.Clear();  // Clear the name input for the next user
                     }
                     catch (Exception ex)
                     {
@@ -265,6 +264,11 @@ namespace FISTML_CS_v0._0
                 {
                     MessageBox.Show("No face detected.");
                 }
+                if (!_labelNames.Values.Contains(name))
+{
+    _labelNames[_labels.Count] = name;  // Ensure unique labels for new users
+    // Add the user to the training set and train only if the user is new
+}
             }
         }
 
@@ -337,49 +341,99 @@ namespace FISTML_CS_v0._0
         }
 
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
-            if (_currentFrame != null)
+            if (_trainingImages.Count == 0 || _labels.Count == 0)
             {
-                var grayFrame = _currentFrame.Convert<Gray, Byte>();
-                var faces = _faceCascade.DetectMultiScale(grayFrame, 1.1, 10, Size.Empty);
+                MessageBox.Show("No face data available in the database. Please add faces first.");
+                return;
+            }
+            ResetRecognizer();  // Reset the recognizer before running detection
+            if (_capture != null && _captureInProgress)
+            {
+                List<string> recognizedNames = new List<string>();
 
-                if (faces.Length > 0)
+                for (int i = 0; i < 9; i++)
                 {
-                    var largestFace = faces.OrderByDescending(f => f.Width * f.Height).First();
-                    var faceImage = _currentFrame.GetSubRect(largestFace).Convert<Gray, Byte>().Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
+                    _currentFrame = _capture.QueryFrame().ToImage<Bgr, Byte>(); // Get a new frame each time
 
-                    pictureBox2.Image = faceImage.ToBitmap();
-
-                    var result = _faceRecognizer.Predict(faceImage);
-
-                    // Check if the label is valid and the distance is within the threshold
-                    if (result.Label != -1 && result.Distance < 50)  // Adjust the distance threshold as needed
+                    if (_currentFrame != null)
                     {
-                        if (_labelNames.ContainsKey(result.Label))
+                        var grayFrame = _currentFrame.Convert<Gray, Byte>();
+                        var faces = _faceCascade.DetectMultiScale(grayFrame, 1.1, 10, Size.Empty);
+
+                        if (faces.Length > 0)
                         {
-                            textBox2.Text = _labelNames[result.Label];  // Display the name of the recognized person
+                            var largestFace = faces.OrderByDescending(f => f.Width * f.Height).First();
+                            var faceImage = _currentFrame.GetSubRect(largestFace).Convert<Gray, Byte>().Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
+
+                            // Update pictureBox2 with the current frame's detected face
+                            pictureBox2.Image = faceImage.ToBitmap();
+
+                            var result = _faceRecognizer.Predict(faceImage);
+
+                            // Check if the label is valid and the distance is within the threshold
+                            if (result.Label != -1 && result.Distance < 50) // Adjust the distance threshold as needed
+                            {
+                                if (_labelNames.ContainsKey(result.Label))
+                                {
+                                    recognizedNames.Add(_labelNames[result.Label]);
+                                }
+                                else
+                                {
+                                    recognizedNames.Add("Unknown");
+                                }
+                            }
+                            else
+                            {
+                                recognizedNames.Add("Unknown");
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Person unknown. Please register first.");
+                            recognizedNames.Add("No face detected");
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Person unknown. Please register first.");
-                    }
 
+                        await Task.Delay(100); // Wait 100ms before capturing the next frame
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("No face detected.");
-                }
+
+                // Find the most common recognized name
+                var mostCommonName = recognizedNames
+                    .GroupBy(n => n)
+                    .OrderByDescending(g => g.Count())
+                    .First().Key;
+
+                // Display the most common name in textBox2
+                textBox2.Text = mostCommonName;
+
+                // Show a summary of the 5 detections in a MessageBox
+                string detectionSummary = string.Join("\n", recognizedNames.Select((name, index) => $"Detection {index + 1}: {name}"));
+                MessageBox.Show($"Summary of the 9 detections:\n{detectionSummary}");
+            }
+            else
+            {
+                MessageBox.Show("No camera capture in progress.");
             }
         }
 
 
+        private void ResetRecognizer()
+        {
+            _trainingImages.Clear();
+            _labels.Clear();
+            _labelNames.Clear();
+            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
 
+            // Load training data from the database again
+            LoadTrainingDataFromDB();
+        }
+        private void SaveAndReloadModel()
+        {
+            SaveModel(); // Save the model after training
+            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100); // Reinitialize the recognizer
+            _faceRecognizer.Read("faceRecognizerModel.xml"); // Reload the saved model
+        }
 
     }
 }
