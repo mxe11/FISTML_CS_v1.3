@@ -139,12 +139,15 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(615, 359);
+            ControlBox = false;
             Controls.Add(btngateentrance);
             Controls.Add(btnattendancestudent);
             Controls.Add(btncamsetup);
             Controls.Add(btnatendanceprof);
             Controls.Add(btnlivecam);
             Controls.Add(panelmain);
+            MaximumSize = new Size(631, 398);
+            MinimumSize = new Size(631, 398);
             Name = "MainForm";
             Text = "Facial Recognition System  - Main Menu";
             panelmain.ResumeLayout(false);

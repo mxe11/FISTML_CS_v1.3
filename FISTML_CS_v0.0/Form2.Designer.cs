@@ -81,11 +81,14 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(793, 522);
+            ControlBox = false;
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(pictureBox1);
             Controls.Add(lbLive);
             Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            MaximumSize = new Size(809, 561);
+            MinimumSize = new Size(809, 561);
             Name = "Form2";
             Text = "Facial Recognition System  - Live Camera";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
