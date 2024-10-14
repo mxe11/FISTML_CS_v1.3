@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             panelmain = new Panel();
             btnlivecam = new Button();
             btnatendanceprof = new Button();
             btncamsetup = new Button();
             btnattendancestudent = new Button();
             btngateentrance = new Button();
-            PBlogout = new PictureBox();
-            PBabout = new PictureBox();
-            PBContact = new PictureBox();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            imageListmenu = new ImageList(components);
             panelmain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PBlogout).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)PBabout).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)PBContact).BeginInit();
             SuspendLayout();
             // 
             // panelmain
             // 
             panelmain.BackColor = SystemColors.ActiveBorder;
-            panelmain.Controls.Add(PBContact);
-            panelmain.Controls.Add(PBabout);
-            panelmain.Controls.Add(PBlogout);
+            panelmain.Controls.Add(button3);
+            panelmain.Controls.Add(button2);
+            panelmain.Controls.Add(button1);
             panelmain.Location = new Point(417, 0);
             panelmain.Name = "panelmain";
             panelmain.Size = new Size(200, 360);
@@ -104,35 +104,53 @@
             btngateentrance.Text = "GATE ENTRANCE IDENTITY\nTRACKER";
             btngateentrance.UseVisualStyleBackColor = true;
             // 
-            // PBlogout
+            // button1
             // 
-            PBlogout.Image = Properties.Resources.logoutICO;
-            PBlogout.Location = new Point(58, 37);
-            PBlogout.Name = "PBlogout";
-            PBlogout.Size = new Size(100, 76);
-            PBlogout.SizeMode = PictureBoxSizeMode.Zoom;
-            PBlogout.TabIndex = 0;
-            PBlogout.TabStop = false;
+            button1.BackColor = SystemColors.ActiveBorder;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ImageIndex = 2;
+            button1.ImageList = imageListmenu;
+            button1.Location = new Point(52, 37);
+            button1.Name = "button1";
+            button1.Size = new Size(100, 76);
+            button1.TabIndex = 3;
+            button1.UseVisualStyleBackColor = false;
             // 
-            // PBabout
+            // button2
             // 
-            PBabout.Image = Properties.Resources.AboutICO;
-            PBabout.Location = new Point(58, 142);
-            PBabout.Name = "PBabout";
-            PBabout.Size = new Size(100, 76);
-            PBabout.SizeMode = PictureBoxSizeMode.Zoom;
-            PBabout.TabIndex = 1;
-            PBabout.TabStop = false;
+            button2.BackColor = SystemColors.ActiveBorder;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.ImageIndex = 0;
+            button2.ImageList = imageListmenu;
+            button2.Location = new Point(52, 142);
+            button2.Name = "button2";
+            button2.Size = new Size(100, 76);
+            button2.TabIndex = 4;
+            button2.UseVisualStyleBackColor = false;
             // 
-            // PBContact
+            // button3
             // 
-            PBContact.Image = Properties.Resources.ContactICO;
-            PBContact.Location = new Point(58, 247);
-            PBContact.Name = "PBContact";
-            PBContact.Size = new Size(100, 76);
-            PBContact.SizeMode = PictureBoxSizeMode.Zoom;
-            PBContact.TabIndex = 2;
-            PBContact.TabStop = false;
+            button3.BackColor = SystemColors.ActiveBorder;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button3.ImageIndex = 1;
+            button3.ImageList = imageListmenu;
+            button3.Location = new Point(52, 249);
+            button3.Name = "button3";
+            button3.Size = new Size(100, 76);
+            button3.TabIndex = 5;
+            button3.UseVisualStyleBackColor = false;
+            // 
+            // imageListmenu
+            // 
+            imageListmenu.ColorDepth = ColorDepth.Depth32Bit;
+            imageListmenu.ImageStream = (ImageListStreamer)resources.GetObject("imageListmenu.ImageStream");
+            imageListmenu.TransparentColor = Color.Transparent;
+            imageListmenu.Images.SetKeyName(0, "ContactICO.png");
+            imageListmenu.Images.SetKeyName(1, "AboutICO.png");
+            imageListmenu.Images.SetKeyName(2, "logoutICO.png");
             // 
             // MainForm
             // 
@@ -151,22 +169,20 @@
             Name = "MainForm";
             Text = "Facial Recognition System  - Main Menu";
             panelmain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)PBlogout).EndInit();
-            ((System.ComponentModel.ISupportInitialize)PBabout).EndInit();
-            ((System.ComponentModel.ISupportInitialize)PBContact).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panelmain;
-        private PictureBox PBContact;
-        private PictureBox PBabout;
-        private PictureBox PBlogout;
         private Button btnlivecam;
         private Button btnatendanceprof;
         private Button btncamsetup;
         private Button btnattendancestudent;
         private Button btngateentrance;
+        private Button button3;
+        private Button button2;
+        private ImageList imageListmenu;
+        private Button button1;
     }
 }
