@@ -265,10 +265,10 @@ namespace FISTML_CS_v0._0
                     MessageBox.Show("No face detected.");
                 }
                 if (!_labelNames.Values.Contains(name))
-{
-    _labelNames[_labels.Count] = name;  // Ensure unique labels for new users
-    // Add the user to the training set and train only if the user is new
-}
+                {
+                    _labelNames[_labels.Count] = name;  // Ensure unique labels for new users
+                                                        // Add the user to the training set and train only if the user is new
+                }
             }
         }
 
