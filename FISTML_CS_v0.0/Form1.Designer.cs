@@ -43,7 +43,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(36, 108);
+            pictureBox1.Location = new Point(11, 38);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(320, 263);
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -52,7 +52,7 @@
             // 
             // pictureBox2
             // 
-            pictureBox2.Location = new Point(362, 108);
+            pictureBox2.Location = new Point(337, 38);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(320, 263);
             pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -62,7 +62,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(36, 85);
+            label1.Location = new Point(273, 15);
             label1.Name = "label1";
             label1.Size = new Size(58, 20);
             label1.TabIndex = 2;
@@ -71,7 +71,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(362, 85);
+            label2.Location = new Point(589, 15);
             label2.Name = "label2";
             label2.Size = new Size(68, 20);
             label2.TabIndex = 3;
@@ -79,14 +79,14 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(792, 307);
+            textBox1.Location = new Point(767, 237);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 4;
             // 
             // button1
             // 
-            button1.Location = new Point(692, 272);
+            button1.Location = new Point(667, 202);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 6;
@@ -96,7 +96,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(692, 307);
+            button2.Location = new Point(667, 237);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 7;
@@ -106,7 +106,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(692, 342);
+            button3.Location = new Point(667, 272);
             button3.Name = "button3";
             button3.Size = new Size(94, 29);
             button3.TabIndex = 8;
@@ -116,7 +116,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(792, 344);
+            textBox2.Location = new Point(767, 274);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(125, 27);
             textBox2.TabIndex = 9;
@@ -125,7 +125,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1117, 450);
+            ClientSize = new Size(906, 332);
             Controls.Add(textBox2);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -135,8 +135,13 @@
             Controls.Add(label1);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
+            MaximizeBox = false;
+            MaximumSize = new Size(924, 379);
+            MinimumSize = new Size(924, 379);
             Name = "Form1";
-            Text = "Form1";
+            ShowIcon = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "FISTML ";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
