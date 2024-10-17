@@ -4,6 +4,7 @@ using Emgu.CV.Face;
 using Emgu.CV.Util;
 using System.Data;
 using MySql.Data.MySqlClient;
+//HELLO
 namespace FISTML_CS_v0._0
 {
     public partial class Form1 : Form
