@@ -407,9 +407,36 @@ namespace FISTML_CS_v0._0
                 // Display the most common name in textBox2
                 textBox2.Text = mostCommonName;
 
-                // Show a summary of the 5 detections in a MessageBox
-                string detectionSummary = string.Join("\n", recognizedNames.Select((name, index) => $"Detection {index + 1}: {name}"));
-                MessageBox.Show($"Summary of the 9 detections:\n{detectionSummary}");
+                // Ask the user if the guess was correct
+                var dialogResult = MessageBox.Show($"Is the detected person {mostCommonName}?", "Confirm Identity", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.No)
+                {
+                    // If the guess was incorrect, ask for the correct name
+                    string correctName = Microsoft.VisualBasic.Interaction.InputBox("Enter the correct name:", "Correct Name", "");
+
+                    if (!string.IsNullOrWhiteSpace(correctName))
+                    {
+                        // Save the face image with the correct name
+                        string faceFileName = $"{_trainingDataPath}/{correctName}_{_imageCounter}.jpg";
+                        var largestFace = _faceCascade.DetectMultiScale(_currentFrame.Convert<Gray, Byte>(), 1.1, 10, Size.Empty)
+                            .OrderByDescending(f => f.Width * f.Height).First();
+                        var faceImage = _currentFrame.GetSubRect(largestFace).Convert<Gray, Byte>().Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
+                        faceImage.Save(faceFileName);
+
+                        // Save the image path to the database
+                        InsertImagePathToDB(correctName, faceFileName);
+
+                        // Add the new face to the training data
+                        _trainingImages.Add(faceImage);
+                        _labels.Add(_labels.Count);
+                        _labelNames[_labels.Count - 1] = correctName;
+                        _imageCounter++;
+
+                        // Retrain the recognizer
+                        SaveAndReloadModel();
+                    }
+                }
             }
             else
             {
