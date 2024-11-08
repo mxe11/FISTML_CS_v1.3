@@ -35,4 +35,6 @@ FISTML is a facial recognition system developed using Visual Studio and .NET Fra
   2. Create a database for the face recognition data (`fistmlbeta`).
   3. Create a table `facerecords` with fields for storing names and image paths.
 
-
+### 5. Ensure the XML Cascades and Face Landmarks.dat are downloaded and the PATHS are ready to be modified into the source code.
+- shape_predictor_68_face_landmarks.dat can be downloaded from https://github.com/italojs/facial-landmarks-recognition/blob/master/shape_predictor_68_face_landmarks.dat
+- haarcascade_frontalface_default.xml can be downloaded from https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml
