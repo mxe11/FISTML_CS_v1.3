@@ -4,6 +4,13 @@ using Emgu.CV.Face;
 using Emgu.CV.Util;
 using System.Data;
 using MySql.Data.MySqlClient;
+
+using DlibDotNet;
+using DlibDotNet.Extensions;
+
+
+
+
 namespace FISTML_CS_v0._0
 {
     public partial class Form1 : Form
@@ -83,8 +90,11 @@ namespace FISTML_CS_v0._0
             // Load training data from the database on startup
             LoadTrainingDataFromDB();
             InitializeComponent();
+            dashboard.BringToFront();
+            testingPANEL.Hide();
+            schedulerPANEL.Hide();
+            _faceCascade = new CascadeClassifier("C:\\Users\\User\\source\\repos\\FISTML_CS_v0.0\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\haarcascade_frontalface_default.xml");
 
-            _faceCascade = new CascadeClassifier("C:\\Users\\Jasfer\\source\\repos\\FISTML_CS_v1.1\\haarcascade_frontalface_default.xml\");
 
             if (!Directory.Exists(_trainingDataPath))
             {
@@ -132,7 +142,7 @@ namespace FISTML_CS_v0._0
                 }
 
                 // Convert List<int> to Matrix<int> for labels
-                Matrix<int> labelMatrix = new Matrix<int>(_labels.Count, 1);
+                Emgu.CV.Matrix<int> labelMatrix = new Emgu.CV.Matrix<int>(_labels.Count, 1);
                 for (int i = 0; i < _labels.Count; i++)
                 {
                     labelMatrix[i, 0] = _labels[i];
@@ -146,21 +156,7 @@ namespace FISTML_CS_v0._0
 
 
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (_capture == null)
-            {
-                _capture = new VideoCapture();
-                _capture.ImageGrabbed += ProcessFrame;
-                _capture.Start();
-                _captureInProgress = true;
-            }
-            else if (!_captureInProgress)
-            {
-                _capture.Start();
-                _captureInProgress = true;
-            }
-        }
+
 
         private void ProcessFrame(object sender, EventArgs e)
         {
@@ -185,9 +181,211 @@ namespace FISTML_CS_v0._0
             }
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+
+        private void LoadTrainingDataFromDB()
+        {
+            // Clear existing training data
+            _trainingImages.Clear();
+            _labels.Clear();
+            _labelNames.Clear();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT UserName, ImagePath FROM FaceRecords";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            int labelCounter = 0;
+
+                            while (reader.Read())
+                            {
+                                string userName = reader.GetString(0);
+                                string imagePath = reader.GetString(1);
+
+                                var grayImage = new Image<Gray, Byte>(imagePath);
+                                _trainingImages.Add(grayImage.Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear));  // Resize to match your capture settings
+
+                                _labels.Add(labelCounter);
+                                _labelNames[labelCounter] = userName;
+                                labelCounter++;
+                            }
+                        }
+                    }
+                }
+
+                if (_trainingImages.Count > 0)
+                {
+                    // Convert List<Image<Gray, byte>> to VectorOfMat for training
+                    VectorOfMat imageVec = new VectorOfMat();
+                    foreach (var img in _trainingImages)
+                    {
+                        imageVec.Push(img.Mat);
+                    }
+
+                    // Convert List<int> to Matrix<int> for labels
+                    Emgu.CV.Matrix<int> labelMatrix = new Emgu.CV.Matrix<int>(_labels.Count, 1);
+                    for (int i = 0; i < _labels.Count; i++)
+                    {
+                        labelMatrix[i, 0] = _labels[i];
+                    }
+
+                    // Train the recognizer with the images and labels
+                    _faceRecognizer.Train(imageVec, labelMatrix);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Error loading data from database: {ex.Message}");
+            }
+        }
+
+
+        private void SaveModel()
+        {
+            _faceRecognizer.Write("faceRecognizerModel.xml");
+        }
+
+
+
+
+
+        private void ResetRecognizer()
+        {
+            _trainingImages.Clear();
+            _labels.Clear();
+            _labelNames.Clear();
+            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
+
+            // Load training data from the database again
+            LoadTrainingDataFromDB();
+        }
+        private void SaveAndReloadModel()
+        {
+            SaveModel(); // Save the model after training
+            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100); // Reinitialize the recognizer
+            _faceRecognizer.Read("faceRecognizerModel.xml"); // Reload the saved model
+        }
+
+
+        private void back_Click(object sender, EventArgs e)
+        {
+            testingPANEL.Hide();
+            dashboard.BringToFront();
+        }
+
+        private void openCamBTN_Click(object sender, EventArgs e)
         {
 
+            if (_capture == null)
+            {
+                _capture = new VideoCapture();
+                _capture.ImageGrabbed += ProcessFrame;
+                _capture.Start();
+                _captureInProgress = true;
+            }
+            else if (!_captureInProgress)
+            {
+                _capture.Start();
+                _captureInProgress = true;
+            }
+        }
+
+        // Track subtle eye movement over time (EAR)
+        private static double GetEyeAspectRatio(VectorOfPointF landmarks, int[] eyeIndices)
+        {
+            var eyePoints = eyeIndices.Select(i => new PointF(landmarks[i].X, landmarks[i].Y)).ToArray();
+            var a = Distance(eyePoints[1], eyePoints[5]);
+            var b = Distance(eyePoints[2], eyePoints[4]);
+            var c = Distance(eyePoints[0], eyePoints[3]);
+
+            return (a + b) / (2.0 * c);
+        }
+
+        private static double GetMouthAspectRatio(VectorOfPointF landmarks)
+        {
+            var mouthPoints = new PointF[]
+            {
+            new PointF(landmarks[48].X, landmarks[48].Y),
+            new PointF(landmarks[54].X, landmarks[54].Y),
+            new PointF(landmarks[51].X, landmarks[51].Y),
+            new PointF(landmarks[57].X, landmarks[57].Y)
+            };
+
+            var a = Distance(mouthPoints[1], mouthPoints[3]);
+            var b = Distance(mouthPoints[0], mouthPoints[2]);
+
+            return a / b;
+        }
+
+        // Measure distance between two points
+        private static double Distance(PointF p1, PointF p2)
+        {
+            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
+        }
+
+        // Compare relative positions of key facial points to detect subtle head movements
+        private static double CompareHeadMovement(VectorOfPointF landmarks, VectorOfPointF prevLandmarks)
+        {
+            double movementScore = 0;
+            for (int i = 0; i < landmarks.Size; i++)
+            {
+                PointF currentPoint = landmarks[i];
+                PointF previousPoint = prevLandmarks[i];
+                movementScore += Distance(currentPoint, previousPoint);  // Calculate movement distance
+            }
+            return movementScore / landmarks.Size;  // Average movement score
+        }
+
+        // Analyze subtle movements in blinking, head position, and mouth expansion to detect liveness
+        public static bool IsLive(VectorOfPointF landmarks, VectorOfPointF prevLandmarks = null)
+        {
+            // Blink detection (Eye Aspect Ratio)
+            double ear = GetEyeAspectRatio(landmarks, new[] { 36, 37, 38, 39, 40, 41 }); // Right eye
+            ear += GetEyeAspectRatio(landmarks, new[] { 42, 43, 44, 45, 46, 47 }); // Left eye
+
+            // Mouth expansion detection (Mouth Aspect Ratio)
+            double mar = GetMouthAspectRatio(landmarks);
+
+            // Track subtle head movement based on facial landmarks (nose, eyes, etc.)
+            double headMovementScore = 0;
+            if (prevLandmarks != null)
+            {
+                // Compare the change in relative positions of key facial points
+                headMovementScore = CompareHeadMovement(landmarks, prevLandmarks);
+            }
+
+            // Thresholds for detecting liveness based on subtle movements
+            double earThreshold = 0.25;  // Subtle blinking
+            double marThreshold = 1.5;   // Mouth expansion
+            double headMovementThreshold = 0.05; // Small head movement detection
+
+            // Initialize liveness score
+            double livenessScore = 0;
+
+            // Subtle blinking detection
+            if (ear < earThreshold)
+                livenessScore += 30;
+
+            // Subtle mouth expansion detection
+            if (mar > marThreshold)
+                livenessScore += 30;
+
+            // Subtle head movement detection
+            if (headMovementScore > headMovementThreshold)
+                livenessScore += 40;
+
+            // Determine if the person is live based on subtle movement detection
+            double liveThreshold = 60.0; // Minimum liveness score required to consider live
+            return livenessScore >= liveThreshold;
+        }
+
+
+        private async void saveImageBTN_Click(object sender, EventArgs e)
+        {
             ResetRecognizer();
             if (_currentFrame != null)
             {
@@ -243,7 +441,7 @@ namespace FISTML_CS_v0._0
                             imageVec.Push(img.Mat);
                         }
 
-                        Matrix<int> labelMatrix = new Matrix<int>(_labels.Count, 1);
+                        Emgu.CV.Matrix<int> labelMatrix = new Emgu.CV.Matrix<int>(_labels.Count, 1);
                         for (int i = 0; i < _labels.Count; i++)
                         {
                             labelMatrix[i, 0] = _labels[i];
@@ -271,77 +469,47 @@ namespace FISTML_CS_v0._0
                 }
             }
         }
-
-
-        private void LoadTrainingDataFromDB()
+        public VectorOfPointF GetFacialLandmarks(Mat frame, System.Drawing.Rectangle faceRegion)
         {
-            // Clear existing training data
-            _trainingImages.Clear();
-            _labels.Clear();
-            _labelNames.Clear();
+            // Convert the frame to grayscale (face detection works better on grayscale images)
+            var grayFrame = frame.ToImage<Gray, Byte>();
 
-            try
+            // Load the Dlib shape predictor model
+            var shapePredictor = ShapePredictor.Deserialize("C:\\Users\\User\\source\\repos\\FISTML_CS_v0.0\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\shape_predictor_68_face_landmarks.dat");
+
+            // Define the face region
+            var dlibRectangle = new DlibDotNet.Rectangle(faceRegion.X, faceRegion.Y, faceRegion.Width, faceRegion.Height);
+
+            // Convert Mat to Bitmap
+            Bitmap bitmap = grayFrame.ToBitmap();
+
+            // Convert Bitmap to DlibDotNet Array2D
+            // Convert the 8bpp indexed Bitmap to a 24bpp RGB Bitmap
+            Bitmap rgbBitmap = new Bitmap(bitmap.Width, bitmap.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            using (Graphics g = Graphics.FromImage(rgbBitmap))
             {
-                using (MySqlConnection conn = new MySqlConnection(_connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT UserName, ImagePath FROM FaceRecords";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            int labelCounter = 0;
-
-                            while (reader.Read())
-                            {
-                                string userName = reader.GetString(0);
-                                string imagePath = reader.GetString(1);
-
-                                var grayImage = new Image<Gray, Byte>(imagePath);
-                                _trainingImages.Add(grayImage.Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear));  // Resize to match your capture settings
-
-                                _labels.Add(labelCounter);
-                                _labelNames[labelCounter] = userName;
-                                labelCounter++;
-                            }
-                        }
-                    }
-                }
-
-                if (_trainingImages.Count > 0)
-                {
-                    // Convert List<Image<Gray, byte>> to VectorOfMat for training
-                    VectorOfMat imageVec = new VectorOfMat();
-                    foreach (var img in _trainingImages)
-                    {
-                        imageVec.Push(img.Mat);
-                    }
-
-                    // Convert List<int> to Matrix<int> for labels
-                    Matrix<int> labelMatrix = new Matrix<int>(_labels.Count, 1);
-                    for (int i = 0; i < _labels.Count; i++)
-                    {
-                        labelMatrix[i, 0] = _labels[i];
-                    }
-
-                    // Train the recognizer with the images and labels
-                    _faceRecognizer.Train(imageVec, labelMatrix);
-                }
+                g.DrawImage(bitmap, new System.Drawing.Rectangle(0, 0, rgbBitmap.Width, rgbBitmap.Height));
             }
-            catch (MySqlException ex)
+
+            // Convert the 24bpp RGB Bitmap to DlibDotNet Array2D
+            var array2D = DlibDotNet.Extensions.BitmapExtensions.ToArray2D<RgbPixel>(rgbBitmap);
+
+            // Get the facial landmarks using the shape predictor
+            var landmarks = shapePredictor.Detect(array2D, dlibRectangle);
+
+            // Convert the landmarks to a VectorOfPointF (Emgu CV format)
+            var landmarksList = new VectorOfPointF();
+            for (uint i = 0; i < landmarks.Parts; i++)
             {
-                MessageBox.Show($"Error loading data from database: {ex.Message}");
+                var point = landmarks.GetPart(i);
+                landmarksList.Push(new PointF[] { new PointF(point.X, point.Y) });
             }
+
+            return landmarksList;
         }
 
-
-        private void SaveModel()
-        {
-            _faceRecognizer.Write("faceRecognizerModel.xml");
-        }
-
-
-        private async void button3_Click(object sender, EventArgs e)
+        private async void detectFaceBTN_Click(object sender, EventArgs e)
         {
             if (_trainingImages.Count == 0 || _labels.Count == 0)
             {
@@ -353,7 +521,10 @@ namespace FISTML_CS_v0._0
             {
                 List<string> recognizedNames = new List<string>();
 
-                for (int i = 0; i < 9; i++)
+                // Initialize variables for previous landmarks (used for liveness detection)
+                VectorOfPointF prevLandmarks = null;
+
+                for (int i = 0; i < 3; i++)
                 {
                     _currentFrame = _capture.QueryFrame().ToImage<Bgr, Byte>(); // Get a new frame each time
 
@@ -369,6 +540,19 @@ namespace FISTML_CS_v0._0
 
                             // Update pictureBox2 with the current frame's detected face
                             pictureBox2.Image = faceImage.ToBitmap();
+
+                            // Detect landmarks (for liveness detection)
+                            Mat matFrame2 = _currentFrame.Mat;
+
+                            var landmarks = GetFacialLandmarks(matFrame2, largestFace); // Assume this is a function that gets landmarks
+
+                            // Liveness check based on blinking, head movement, and mouth expansion
+                            bool isLive = IsLive(landmarks, prevLandmarks);
+                            prevLandmarks = landmarks; // Save the current landmarks for comparison in the next frame
+
+                            // Display liveness status
+                            string livenessStatus = isLive ? "Live" : "Not Live";
+                            textBox2.Text = livenessStatus;  // Display result in textBox3
 
                             var result = _faceRecognizer.Predict(faceImage);
 
@@ -444,23 +628,65 @@ namespace FISTML_CS_v0._0
             }
         }
 
-
-        private void ResetRecognizer()
+        private void testingBTN_Click_1(object sender, EventArgs e)
         {
-            _trainingImages.Clear();
-            _labels.Clear();
-            _labelNames.Clear();
-            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
+            testingPANEL.Show();
+            testingPANEL.BringToFront();
 
-            // Load training data from the database again
-            LoadTrainingDataFromDB();
-        }
-        private void SaveAndReloadModel()
-        {
-            SaveModel(); // Save the model after training
-            _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100); // Reinitialize the recognizer
-            _faceRecognizer.Read("faceRecognizerModel.xml"); // Reload the saved model
         }
 
+        private void schedulerWindowBTN_Click(object sender, EventArgs e)
+        {
+            schedulerPANEL.Show();
+            schedulerPANEL.BringToFront();
+        }
+        public void InsertClassData(string profText, string classCodeText, string subName, string timeSelectorComboBox, string roomSelectorComboBox)
+        {
+            string connectionString = "Server=localhost;Port=3306;Database=fistmlbeta;Uid=root;Pwd=root;";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "INSERT INTO testclass_table (prof_name, code, sub_name, time, classroom) VALUES (@profName, @classCode, @subName, @timeSelector, @classroom)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@profName", profText);
+                        cmd.Parameters.AddWithValue("@classCode", classCodeText);
+                        cmd.Parameters.AddWithValue("@subName", subName);
+                        cmd.Parameters.AddWithValue("@timeSelector", timeSelectorComboBox);
+                        cmd.Parameters.AddWithValue("@classroom", roomSelectorComboBox);
+
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            MessageBox.Show("Data inserted successfully!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to insert data.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+        private void schedulerReturnBTN_Click(object sender, EventArgs e)
+        {
+            schedulerPANEL.Hide();
+            dashboard.BringToFront();
+        }
+
+        private void submitToDbBTN_Click(object sender, EventArgs e)
+        {
+            InsertClassData(profText.Text, classCodeText.Text, subName.Text, timeSelectorComboBox.Text, roomSelectorComboBox.Text);
+        }
     }
 }
