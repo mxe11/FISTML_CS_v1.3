@@ -10,7 +10,7 @@ FISTML is a facial recognition system developed using Visual Studio and .NET Fra
 - **Multiple Registration:** Can Save or Register Multiple Users in one session.
 - **Face Detection:** Detects human faces in images or live video streams.
 - **Face Recognition:** Matches detected faces with stored image paths in a MySQL database.
-- **Database Storage:** Stores paths to 5 reference images per person for matching.
+- **Database Storage:** Stores paths to reference images per person for matching.
 - **Image Processing:** Utilizes machine learning techniques for high recognition accuracy.
 - **Real-Time Performance:** Efficient real-time face detection and recognition.
 - **Model Retraining:** Automatically retrains the recognition model when new faces are added.
