@@ -4,8 +4,10 @@ using Emgu.CV.Face;
 using Emgu.CV.Util;
 using System.Data;
 using MySql.Data.MySqlClient;
+
 using DlibDotNet;
 using DlibDotNet.Extensions;
+
 
 
 
@@ -92,6 +94,7 @@ namespace FISTML_CS_v0._0
             testingPANEL.Hide();
             schedulerPANEL.Hide();
             _faceCascade = new CascadeClassifier("C:\\Users\\User\\source\\repos\\FISTML_CS_v0.0\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\haarcascade_frontalface_default.xml");
+
 
             if (!Directory.Exists(_trainingDataPath))
             {
