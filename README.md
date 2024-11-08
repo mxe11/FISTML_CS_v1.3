@@ -35,10 +35,4 @@ FISTML is a facial recognition system developed using Visual Studio and .NET Fra
   2. Create a database for the face recognition data (`fistmlbeta`).
   3. Create a table `facerecords` with fields for storing names and image paths.
 
-### 5. Git (Version Control)
-- Install **Git** for version control and collaboration:
-  - Download from [Git's official website](https://git-scm.com).
-
-### Optional: CUDA (GPU Acceleration)
-- Install **CUDA** for faster facial recognition via GPU (optional).
 
