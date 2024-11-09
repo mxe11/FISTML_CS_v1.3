@@ -40,6 +40,7 @@
             pictureBox2 = new PictureBox();
             pictureBox1 = new PictureBox();
             schedulerPANEL = new Panel();
+            button1 = new Button();
             subName = new TextBox();
             classCodeText = new TextBox();
             schedulerReturnBTN = new Button();
@@ -174,6 +175,7 @@
             // 
             // schedulerPANEL
             // 
+            schedulerPANEL.Controls.Add(button1);
             schedulerPANEL.Controls.Add(subName);
             schedulerPANEL.Controls.Add(classCodeText);
             schedulerPANEL.Controls.Add(schedulerReturnBTN);
@@ -185,6 +187,16 @@
             schedulerPANEL.Name = "schedulerPANEL";
             schedulerPANEL.Size = new Size(803, 501);
             schedulerPANEL.TabIndex = 11;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(16, 228);
+            button1.Name = "button1";
+            button1.Size = new Size(289, 23);
+            button1.TabIndex = 8;
+            button1.Text = "Test Live Detect";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // subName
             // 
@@ -236,7 +248,7 @@
             // 
             timeSelectorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             timeSelectorComboBox.FormattingEnabled = true;
-            timeSelectorComboBox.Items.AddRange(new object[] { "06:00 am - 07:00 am", "07:00 am - 08:00 am", "08:00 am - 09:00 am", "10:00 am - 11:00 am", "11:00 am - 12:00 pm", "12:00 pm - 01:00 pm", "01:00 pm - 02:00 pm", "02:00 pm - 03:00 pm", "03:00 pm - 04:00 pm", "04:00 pm - 05:00 pm", "05:00 pm - 06:00 pm", "06:00 pm - 07:00 pm", "07:00 pm - 08:00 pm", "08:00 pm - 09:00 pm", "09:00 pm - 10:00 pm" });
+            timeSelectorComboBox.Items.AddRange(new object[] { "06:00 AM - 07:00 AM", "07:00 AM - 08:00 AM", "08:00 AM - 09:00 AM", "10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "12:00 PM - 01:00 PM", "01:00 PM - 02:00 PM", "02:00 PM - 03:00 PM", "03:00 PM - 04:00 PM", "04:00 PM - 05:00 PM", "05:00 PM - 06:00 PM", "06:00 PM - 07:00 PM", "07:00 PM - 08:00 PM", "08:00 PM - 09:00 PM", "09:00 PM - 10:00 PM" });
             timeSelectorComboBox.Location = new Point(16, 109);
             timeSelectorComboBox.Name = "timeSelectorComboBox";
             timeSelectorComboBox.Size = new Size(121, 23);
@@ -295,6 +307,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FISTML ";
+            Load += Form1_Load;
             testingPANEL.ResumeLayout(false);
             testingPANEL.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -329,5 +342,6 @@
         private Button schedulerReturnBTN;
         private TextBox classCodeText;
         private TextBox subName;
+        private Button button1;
     }
 }
