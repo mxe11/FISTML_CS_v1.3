@@ -383,6 +383,162 @@ namespace FISTML_CS_v0._0
             return livenessScore >= liveThreshold;
         }
 
+        private async Task ScheduledDetection()
+        {
+            string connectionString = "server=localhost;port=3306;database=fistmlbeta;uid=root;pwd=root;";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Retrieve current schedules with start_time and end_time
+                string query = "SELECT id, code, start_time, end_time, prof_name FROM testclass_table";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32(0);
+                        string code = reader.GetString(1);
+                        DateTime startTime = reader.GetDateTime(2);
+                        DateTime endTime = reader.GetDateTime(3);
+                        string profName = reader.GetString(4);
+
+                        if (DateTime.Now >= startTime && DateTime.Now <= endTime)
+                        {
+                            await DetectFaceTesting(5, code, profName, startTime); // Run detection with set captures
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task DetectFaceTesting(int captureCount, string classCode, string profName, DateTime startTime)
+        {
+            if (_trainingImages.Count == 0 || _labels.Count == 0)
+            {
+                MessageBox.Show("No face data available in the database. Please add faces first.");
+                return;
+            }
+
+            ResetRecognizer();
+
+            if (_capture == null)
+            {
+                _capture = new VideoCapture();
+                _capture.ImageGrabbed += ProcessFrame;
+                _capture.Start();
+                _captureInProgress = true;
+            }
+
+            List<string> recognizedNames = new List<string>();
+            VectorOfPointF prevLandmarks = null;
+            int frameCaptureCount = 0;
+
+            while (frameCaptureCount < captureCount)
+            {
+                _currentFrame = _capture.QueryFrame().ToImage<Bgr, Byte>();
+
+                if (_currentFrame != null)
+                {
+                    var grayFrame = _currentFrame.Convert<Gray, Byte>();
+                    var faces = _faceCascade.DetectMultiScale(grayFrame, 1.1, 10, Size.Empty);
+
+                    if (faces.Length > 0)
+                    {
+                        var largestFace = faces.OrderByDescending(f => f.Width * f.Height).First();
+                        var faceImage = _currentFrame.GetSubRect(largestFace).Convert<Gray, Byte>().Resize(500, 500, Emgu.CV.CvEnum.Inter.Linear);
+
+                        pictureBox2.Image = faceImage.ToBitmap();
+
+                        var landmarks = GetFacialLandmarks(_currentFrame.Mat, largestFace);
+                        bool isLive = IsLive(landmarks, prevLandmarks);
+                        prevLandmarks = landmarks;
+
+                        var result = _faceRecognizer.Predict(faceImage);
+                        if (isLive && result.Label != -1 && result.Distance < 50 && _labelNames[result.Label] == profName)
+                        {
+                            recognizedNames.Add(profName);
+                        }
+                        else
+                        {
+                            recognizedNames.Add("Unknown");
+                        }
+                    }
+                    else
+                    {
+                        recognizedNames.Add("No face detected");
+                    }
+
+                    frameCaptureCount++;
+                    await Task.Delay(100);
+                }
+            }
+
+            var mostCommonName = recognizedNames
+                .GroupBy(n => n)
+                .OrderByDescending(g => g.Count())
+                .First().Key;
+
+            textBox2.Text = mostCommonName;
+
+            TimeSpan elapsedTime = DateTime.Now - startTime;
+            string attendanceStatus = DetermineAttendanceStatus(mostCommonName, profName, startTime);
+
+            if (attendanceStatus != null)
+            {
+                RecordAttendance(classCode, profName, attendanceStatus, startTime);
+            }
+
+            CloseCamera();
+        }
+
+        private string DetermineAttendanceStatus(string detectedName, string profName, DateTime startTime)
+        {
+            if (detectedName == profName)
+            {
+                TimeSpan arrivalTime = DateTime.Now - startTime;
+                if (arrivalTime.TotalMinutes <= 10)
+                    return "Present";
+                else if (arrivalTime.TotalMinutes <= 15)
+                    return "Late";
+            }
+            return "Absent";
+        }
+
+        private void RecordAttendance(string classCode, string profName, string attendanceStatus, DateTime startTime)
+        {
+            string connectionString = "server=localhost;port=3306;database=fistmlbeta;uid=root;pwd=root;";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (MySqlCommand cmd = new MySqlCommand(
+                    "INSERT INTO attendance_records (code, date, prof_name, status) VALUES (@code, @date, @profName, @status)", connection))
+                {
+                    DateTime attendanceDate = attendanceStatus == "Present" ? startTime : DateTime.Today;
+
+                    cmd.Parameters.AddWithValue("@code", classCode);
+                    cmd.Parameters.AddWithValue("@date", attendanceDate);
+                    cmd.Parameters.AddWithValue("@profName", profName);
+                    cmd.Parameters.AddWithValue("@status", attendanceStatus);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void CloseCamera()
+        {
+            if (_capture != null)
+            {
+                _capture.Stop();
+                _capture.Dispose();
+                _capture = null;
+                _captureInProgress = false;
+            }
+        }
+
 
         private async void saveImageBTN_Click(object sender, EventArgs e)
         {
@@ -511,6 +667,11 @@ namespace FISTML_CS_v0._0
 
         private async void detectFaceBTN_Click(object sender, EventArgs e)
         {
+            DetectFaceTesting(3);
+        }
+
+        private async void DetectFaceTesting(int captureCount)
+        {
             if (_trainingImages.Count == 0 || _labels.Count == 0)
             {
                 MessageBox.Show("No face data available in the database. Please add faces first.");
@@ -524,7 +685,7 @@ namespace FISTML_CS_v0._0
                 // Initialize variables for previous landmarks (used for liveness detection)
                 VectorOfPointF prevLandmarks = null;
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < captureCount; i++)
                 {
                     _currentFrame = _capture.QueryFrame().ToImage<Bgr, Byte>(); // Get a new frame each time
 
@@ -650,14 +811,22 @@ namespace FISTML_CS_v0._0
                 {
                     connection.Open();
 
-                    string query = "INSERT INTO testclass_table (prof_name, code, sub_name, time, classroom) VALUES (@profName, @classCode, @subName, @timeSelector, @classroom)";
+                    // Split the selected time interval into start and end times
+                    string[] times = timeSelectorComboBox.Split('-');
+                    DateTime startTime = DateTime.Parse(times[0].Trim());
+                    DateTime endTime = DateTime.Parse(times[1].Trim());
+
+                    // Update query to insert start_time and end_time instead of a single time
+                    string query = "INSERT INTO testclass_table (prof_name, code, sub_name, start_time, end_time, classroom) " +
+                                   "VALUES (@profName, @classCode, @subName, @startTime, @endTime, @classroom)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@profName", profText);
                         cmd.Parameters.AddWithValue("@classCode", classCodeText);
                         cmd.Parameters.AddWithValue("@subName", subName);
-                        cmd.Parameters.AddWithValue("@timeSelector", timeSelectorComboBox);
+                        cmd.Parameters.AddWithValue("@startTime", startTime);
+                        cmd.Parameters.AddWithValue("@endTime", endTime);
                         cmd.Parameters.AddWithValue("@classroom", roomSelectorComboBox);
 
                         int result = cmd.ExecuteNonQuery();
@@ -678,6 +847,7 @@ namespace FISTML_CS_v0._0
                 }
             }
         }
+
         private void schedulerReturnBTN_Click(object sender, EventArgs e)
         {
             schedulerPANEL.Hide();
@@ -687,6 +857,20 @@ namespace FISTML_CS_v0._0
         private void submitToDbBTN_Click(object sender, EventArgs e)
         {
             InsertClassData(profText.Text, classCodeText.Text, subName.Text, timeSelectorComboBox.Text, roomSelectorComboBox.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private System.Windows.Forms.Timer detectionTimer;
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            detectionTimer = new System.Windows.Forms.Timer { Interval = 5000 }; // Set to 5 seconds
+            detectionTimer.Tick += async (s, args) => await ScheduledDetection();
+            detectionTimer.Start();
+
         }
     }
 }
