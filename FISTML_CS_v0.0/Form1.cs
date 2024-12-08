@@ -93,7 +93,7 @@ namespace FISTML_CS_v0._0
             dashboard.BringToFront();
             testingPANEL.Hide();
             schedulerPANEL.Hide();
-            _faceCascade = new CascadeClassifier("C:\\Users\\User\\source\\repos\\FISTML_CS_v0.0\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\haarcascade_frontalface_default.xml");
+            _faceCascade = new CascadeClassifier("F:\\FISTML\\FISTML_CS_v1.3\\haarcascade_frontalface_default.xml");
 
 
             if (!Directory.Exists(_trainingDataPath))
@@ -412,7 +412,7 @@ namespace FISTML_CS_v0._0
                 }
             }
         }
-
+       
         private async Task DetectFaceTesting(int captureCount, string classCode, string profName, DateTime startTime)
         {
             if (_trainingImages.Count == 0 || _labels.Count == 0)
@@ -631,7 +631,7 @@ namespace FISTML_CS_v0._0
             var grayFrame = frame.ToImage<Gray, Byte>();
 
             // Load the Dlib shape predictor model
-            var shapePredictor = ShapePredictor.Deserialize("C:\\Users\\User\\source\\repos\\FISTML_CS_v0.0\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\shape_predictor_68_face_landmarks.dat");
+            var shapePredictor = ShapePredictor.Deserialize("F:\\FISTML\\FISTML_CS_v1.3\\FISTML_CS_v0.0\\bin\\Debug\\net8.0-windows\\shape_predictor_68_face_landmarks.dat");
 
             // Define the face region
             var dlibRectangle = new DlibDotNet.Rectangle(faceRegion.X, faceRegion.Y, faceRegion.Width, faceRegion.Height);
