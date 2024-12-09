@@ -296,9 +296,9 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 498);
+            Controls.Add(testingPANEL);
             Controls.Add(schedulerPANEL);
             Controls.Add(dashboard);
-            Controls.Add(testingPANEL);
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MaximumSize = new Size(816, 537);

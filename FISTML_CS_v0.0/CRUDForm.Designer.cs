@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            dataGridView1 = new DataGridView();
             button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
-            button6 = new Button();
-            button7 = new Button();
+            dataGridView1 = new DataGridView();
+            panel5 = new Panel();
+            panel2 = new Panel();
+            panel3 = new Panel();
+            panel4 = new Panel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -43,10 +43,10 @@
             // 
             panel1.BackgroundImage = Properties.Resources.Backgroundlogin;
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
-            panel1.Controls.Add(button6);
-            panel1.Controls.Add(button7);
-            panel1.Controls.Add(button2);
-            panel1.Controls.Add(button3);
+            panel1.Controls.Add(panel3);
+            panel1.Controls.Add(panel4);
+            panel1.Controls.Add(panel2);
+            panel1.Controls.Add(panel5);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(dataGridView1);
             panel1.Location = new Point(0, 0);
@@ -54,63 +54,64 @@
             panel1.Size = new Size(801, 577);
             panel1.TabIndex = 1;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.RoyalBlue;
+            button1.FlatStyle = FlatStyle.Popup;
+            button1.Location = new Point(57, 63);
+            button1.Name = "button1";
+            button1.Size = new Size(88, 23);
+            button1.TabIndex = 7;
+            button1.UseVisualStyleBackColor = false;
+            // 
             // dataGridView1
             // 
+            dataGridView1.BackgroundColor = Color.AliceBlue;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(200, 52);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(525, 432);
             dataGridView1.TabIndex = 6;
             // 
-            // button1
+            // panel5
             // 
-            button1.BackColor = Color.RoyalBlue;
-            button1.FlatStyle = FlatStyle.Popup;
-            button1.Location = new Point(57, 141);
-            button1.Name = "button1";
-            button1.Size = new Size(88, 23);
-            button1.TabIndex = 7;
-            button1.UseVisualStyleBackColor = false;
+            panel5.BackColor = Color.Transparent;
+            panel5.BackgroundImage = Properties.Resources.Rectangle_7;
+            panel5.BackgroundImageLayout = ImageLayout.Stretch;
+            panel5.Location = new Point(62, 134);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(83, 29);
+            panel5.TabIndex = 12;
             // 
-            // button2
+            // panel2
             // 
-            button2.BackColor = Color.RoyalBlue;
-            button2.FlatStyle = FlatStyle.Popup;
-            button2.Location = new Point(57, 238);
-            button2.Name = "button2";
-            button2.Size = new Size(88, 23);
-            button2.TabIndex = 9;
-            button2.UseVisualStyleBackColor = false;
+            panel2.BackColor = Color.Transparent;
+            panel2.BackgroundImage = Properties.Resources.Rectangle_7;
+            panel2.BackgroundImageLayout = ImageLayout.Stretch;
+            panel2.Location = new Point(62, 183);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(83, 29);
+            panel2.TabIndex = 13;
             // 
-            // button3
+            // panel3
             // 
-            button3.BackColor = Color.RoyalBlue;
-            button3.FlatStyle = FlatStyle.Popup;
-            button3.Location = new Point(57, 190);
-            button3.Name = "button3";
-            button3.Size = new Size(88, 23);
-            button3.TabIndex = 8;
-            button3.UseVisualStyleBackColor = false;
+            panel3.BackColor = Color.Transparent;
+            panel3.BackgroundImage = Properties.Resources.Rectangle_7;
+            panel3.BackgroundImageLayout = ImageLayout.Stretch;
+            panel3.Location = new Point(62, 284);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(83, 29);
+            panel3.TabIndex = 15;
             // 
-            // button6
+            // panel4
             // 
-            button6.BackColor = Color.RoyalBlue;
-            button6.FlatStyle = FlatStyle.Popup;
-            button6.Location = new Point(57, 336);
-            button6.Name = "button6";
-            button6.Size = new Size(88, 23);
-            button6.TabIndex = 11;
-            button6.UseVisualStyleBackColor = false;
-            // 
-            // button7
-            // 
-            button7.BackColor = Color.RoyalBlue;
-            button7.FlatStyle = FlatStyle.Popup;
-            button7.Location = new Point(57, 288);
-            button7.Name = "button7";
-            button7.Size = new Size(88, 23);
-            button7.TabIndex = 10;
-            button7.UseVisualStyleBackColor = false;
+            panel4.BackColor = Color.Transparent;
+            panel4.BackgroundImage = Properties.Resources.Rectangle_7;
+            panel4.BackgroundImageLayout = ImageLayout.Stretch;
+            panel4.Location = new Point(62, 235);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(83, 29);
+            panel4.TabIndex = 14;
             // 
             // CRUDForm
             // 
@@ -128,11 +129,11 @@
         #endregion
 
         private Panel panel1;
-        private Button button6;
-        private Button button7;
-        private Button button2;
-        private Button button3;
         private Button button1;
         private DataGridView dataGridView1;
+        private Panel panel3;
+        private Panel panel4;
+        private Panel panel2;
+        private Panel panel5;
     }
 }

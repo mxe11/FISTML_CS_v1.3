@@ -29,14 +29,16 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            button6 = new Button();
-            button7 = new Button();
-            button2 = new Button();
+            button1 = new Button();
             label2 = new Label();
             label1 = new Label();
             pictureBox2 = new PictureBox();
             pictureBox1 = new PictureBox();
-            button1 = new Button();
+            button6 = new Button();
+            button7 = new Button();
+            button2 = new Button();
+            panel2 = new Panel();
+            panel3 = new Panel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -46,6 +48,8 @@
             // 
             panel1.BackgroundImage = Properties.Resources.Backgroundlogin;
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
+            panel1.Controls.Add(panel3);
+            panel1.Controls.Add(panel2);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(label1);
@@ -58,6 +62,62 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(856, 636);
             panel1.TabIndex = 2;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.RoyalBlue;
+            button1.FlatStyle = FlatStyle.Popup;
+            button1.Location = new Point(722, 440);
+            button1.Name = "button1";
+            button1.Size = new Size(88, 23);
+            button1.TabIndex = 18;
+            button1.UseVisualStyleBackColor = false;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.AliceBlue;
+            label2.Location = new Point(598, 74);
+            label2.Name = "label2";
+            label2.Size = new Size(68, 15);
+            label2.TabIndex = 17;
+            label2.Text = "CAPTURED";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.AliceBlue;
+            label1.Location = new Point(194, 74);
+            label1.Name = "label1";
+            label1.Size = new Size(55, 15);
+            label1.TabIndex = 16;
+            label1.Text = "CAMERA";
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackColor = Color.AliceBlue;
+            pictureBox2.Location = new Point(428, 91);
+            pictureBox2.Margin = new Padding(3, 2, 3, 2);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(382, 326);
+            pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox2.TabIndex = 15;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackColor = Color.AliceBlue;
+            pictureBox1.Location = new Point(40, 91);
+            pictureBox1.Margin = new Padding(3, 2, 3, 2);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(382, 326);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 14;
+            pictureBox1.TabStop = false;
             // 
             // button6
             // 
@@ -89,59 +149,25 @@
             button2.TabIndex = 9;
             button2.UseVisualStyleBackColor = false;
             // 
-            // label2
+            // panel2
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.AliceBlue;
-            label2.Location = new Point(598, 74);
-            label2.Name = "label2";
-            label2.Size = new Size(68, 15);
-            label2.TabIndex = 17;
-            label2.Text = "CAPTURED";
+            panel2.BackColor = Color.AliceBlue;
+            panel2.BackgroundImage = Properties.Resources.Camera_off;
+            panel2.BackgroundImageLayout = ImageLayout.Stretch;
+            panel2.Location = new Point(614, 233);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(32, 37);
+            panel2.TabIndex = 20;
             // 
-            // label1
+            // panel3
             // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.AliceBlue;
-            label1.Location = new Point(194, 74);
-            label1.Name = "label1";
-            label1.Size = new Size(55, 15);
-            label1.TabIndex = 16;
-            label1.Text = "CAMERA";
-            // 
-            // pictureBox2
-            // 
-            pictureBox2.Location = new Point(428, 91);
-            pictureBox2.Margin = new Padding(3, 2, 3, 2);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(382, 326);
-            pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
-            pictureBox2.TabIndex = 15;
-            pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Location = new Point(40, 91);
-            pictureBox1.Margin = new Padding(3, 2, 3, 2);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(382, 326);
-            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-            pictureBox1.TabIndex = 14;
-            pictureBox1.TabStop = false;
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.RoyalBlue;
-            button1.FlatStyle = FlatStyle.Popup;
-            button1.Location = new Point(722, 440);
-            button1.Name = "button1";
-            button1.Size = new Size(88, 23);
-            button1.TabIndex = 18;
-            button1.UseVisualStyleBackColor = false;
+            panel3.BackColor = Color.AliceBlue;
+            panel3.BackgroundImage = Properties.Resources.Camera_off;
+            panel3.BackgroundImageLayout = ImageLayout.Stretch;
+            panel3.Location = new Point(204, 233);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(32, 37);
+            panel3.TabIndex = 21;
             // 
             // CAMERAForm
             // 
@@ -169,5 +195,7 @@
         private Label label1;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
+        private Panel panel3;
+        private Panel panel2;
     }
 }
