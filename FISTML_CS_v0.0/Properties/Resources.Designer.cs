@@ -73,6 +73,16 @@ namespace FISTML_CS_v0._0.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap arrow_drop_down {
+            get {
+                object obj = ResourceManager.GetObject("arrow_drop_down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap arrow_drop_up {
             get {
                 object obj = ResourceManager.GetObject("arrow_drop_up", resourceCulture);
@@ -316,6 +326,16 @@ namespace FISTML_CS_v0._0.Properties {
         internal static System.Drawing.Bitmap profileuser {
             get {
                 object obj = ResourceManager.GetObject("profileuser", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Rectangle_16 {
+            get {
+                object obj = ResourceManager.GetObject("Rectangle 16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
