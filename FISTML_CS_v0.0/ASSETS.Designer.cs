@@ -32,8 +32,6 @@
             panel2 = new Panel();
             panel3 = new Panel();
             panel4 = new Panel();
-            panel5 = new Panel();
-            panel6 = new Panel();
             panel7 = new Panel();
             panel8 = new Panel();
             panel9 = new Panel();
@@ -43,15 +41,22 @@
             panel13 = new Panel();
             panel14 = new Panel();
             panel15 = new Panel();
-            panel16 = new Panel();
-            panel17 = new Panel();
+            lbforgotpassword = new Label();
+            panel18 = new Panel();
             lbPassword = new Label();
             tbpassword = new TextBox();
             lbEmail = new Label();
             tbEmail = new TextBox();
-            panel18 = new Panel();
-            lbforgotpassword = new Label();
+            panel16 = new Panel();
+            panel17 = new Panel();
+            panel19 = new Panel();
+            panel5 = new Panel();
+            lbbutton = new Label();
+            panel6 = new Panel();
+            label1 = new Label();
             panel15.SuspendLayout();
+            panel5.SuspendLayout();
+            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -93,26 +98,6 @@
             panel4.Name = "panel4";
             panel4.Size = new Size(32, 37);
             panel4.TabIndex = 3;
-            // 
-            // panel5
-            // 
-            panel5.BackColor = Color.Transparent;
-            panel5.BackgroundImage = Properties.Resources.Rectangle_7;
-            panel5.BackgroundImageLayout = ImageLayout.Stretch;
-            panel5.Location = new Point(105, 20);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(83, 29);
-            panel5.TabIndex = 4;
-            // 
-            // panel6
-            // 
-            panel6.BackColor = Color.Transparent;
-            panel6.BackgroundImage = Properties.Resources.Rectangle_7__1_;
-            panel6.BackgroundImageLayout = ImageLayout.Stretch;
-            panel6.Location = new Point(202, 20);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(83, 29);
-            panel6.TabIndex = 5;
             // 
             // panel7
             // 
@@ -207,25 +192,28 @@
             panel15.Size = new Size(363, 524);
             panel15.TabIndex = 14;
             // 
-            // panel16
+            // lbforgotpassword
             // 
-            panel16.BackColor = Color.Transparent;
-            panel16.BackgroundImage = Properties.Resources.Backgroundlogin;
-            panel16.BackgroundImageLayout = ImageLayout.Stretch;
-            panel16.Location = new Point(11, 334);
-            panel16.Name = "panel16";
-            panel16.Size = new Size(93, 63);
-            panel16.TabIndex = 15;
+            lbforgotpassword.AutoSize = true;
+            lbforgotpassword.BackColor = Color.Transparent;
+            lbforgotpassword.Cursor = Cursors.Hand;
+            lbforgotpassword.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lbforgotpassword.ForeColor = SystemColors.ControlText;
+            lbforgotpassword.Location = new Point(21, 217);
+            lbforgotpassword.Name = "lbforgotpassword";
+            lbforgotpassword.Size = new Size(119, 19);
+            lbforgotpassword.TabIndex = 16;
+            lbforgotpassword.Text = "Forgot password?";
             // 
-            // panel17
+            // panel18
             // 
-            panel17.BackColor = Color.Transparent;
-            panel17.BackgroundImage = Properties.Resources.Vector;
-            panel17.BackgroundImageLayout = ImageLayout.Stretch;
-            panel17.Location = new Point(111, 334);
-            panel17.Name = "panel17";
-            panel17.Size = new Size(93, 63);
-            panel17.TabIndex = 16;
+            panel18.BackColor = Color.Transparent;
+            panel18.BackgroundImage = Properties.Resources.Button_Group;
+            panel18.BackgroundImageLayout = ImageLayout.Stretch;
+            panel18.Location = new Point(21, 179);
+            panel18.Name = "panel18";
+            panel18.Size = new Size(327, 25);
+            panel18.TabIndex = 14;
             // 
             // lbPassword
             // 
@@ -268,34 +256,90 @@
             tbEmail.TabIndex = 6;
             tbEmail.TabStop = false;
             // 
-            // panel18
+            // panel16
             // 
-            panel18.BackColor = Color.Transparent;
-            panel18.BackgroundImage = Properties.Resources.Button_Group;
-            panel18.BackgroundImageLayout = ImageLayout.Stretch;
-            panel18.Location = new Point(21, 179);
-            panel18.Name = "panel18";
-            panel18.Size = new Size(327, 25);
-            panel18.TabIndex = 14;
+            panel16.BackColor = Color.Transparent;
+            panel16.BackgroundImage = Properties.Resources.Backgroundlogin;
+            panel16.BackgroundImageLayout = ImageLayout.Stretch;
+            panel16.Location = new Point(11, 334);
+            panel16.Name = "panel16";
+            panel16.Size = new Size(93, 63);
+            panel16.TabIndex = 15;
             // 
-            // lbforgotpassword
+            // panel17
             // 
-            lbforgotpassword.AutoSize = true;
-            lbforgotpassword.BackColor = Color.Transparent;
-            lbforgotpassword.Cursor = Cursors.Hand;
-            lbforgotpassword.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lbforgotpassword.ForeColor = SystemColors.ControlText;
-            lbforgotpassword.Location = new Point(21, 217);
-            lbforgotpassword.Name = "lbforgotpassword";
-            lbforgotpassword.Size = new Size(119, 19);
-            lbforgotpassword.TabIndex = 16;
-            lbforgotpassword.Text = "Forgot password?";
+            panel17.BackColor = Color.Transparent;
+            panel17.BackgroundImage = Properties.Resources.Vector;
+            panel17.BackgroundImageLayout = ImageLayout.Stretch;
+            panel17.Location = new Point(111, 334);
+            panel17.Name = "panel17";
+            panel17.Size = new Size(93, 63);
+            panel17.TabIndex = 16;
+            // 
+            // panel19
+            // 
+            panel19.BackColor = Color.Transparent;
+            panel19.BackgroundImage = Properties.Resources._00_Button;
+            panel19.BackgroundImageLayout = ImageLayout.Stretch;
+            panel19.Location = new Point(89, 68);
+            panel19.Name = "panel19";
+            panel19.Size = new Size(97, 30);
+            panel19.TabIndex = 17;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = Color.Transparent;
+            panel5.BackgroundImage = Properties.Resources.Rectangle_7;
+            panel5.BackgroundImageLayout = ImageLayout.Stretch;
+            panel5.Controls.Add(lbbutton);
+            panel5.Location = new Point(89, 21);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(114, 38);
+            panel5.TabIndex = 13;
+            // 
+            // lbbutton
+            // 
+            lbbutton.AutoSize = true;
+            lbbutton.BackColor = Color.Transparent;
+            lbbutton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbbutton.ForeColor = Color.AliceBlue;
+            lbbutton.Location = new Point(23, 6);
+            lbbutton.Name = "lbbutton";
+            lbbutton.Size = new Size(64, 19);
+            lbbutton.TabIndex = 5;
+            lbbutton.Text = "btnname";
+            // 
+            // panel6
+            // 
+            panel6.BackColor = Color.Transparent;
+            panel6.BackgroundImage = Properties.Resources.Rectangle_7__1_;
+            panel6.BackgroundImageLayout = ImageLayout.Stretch;
+            panel6.Controls.Add(label1);
+            panel6.Location = new Point(209, 21);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(114, 38);
+            panel6.TabIndex = 18;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.AliceBlue;
+            label1.Location = new Point(23, 6);
+            label1.Name = "label1";
+            label1.Size = new Size(64, 19);
+            label1.TabIndex = 5;
+            label1.Text = "btnname";
             // 
             // ASSETS
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 563);
+            Controls.Add(panel6);
+            Controls.Add(panel5);
+            Controls.Add(panel19);
             Controls.Add(panel17);
             Controls.Add(panel16);
             Controls.Add(panel15);
@@ -307,8 +351,6 @@
             Controls.Add(panel9);
             Controls.Add(panel8);
             Controls.Add(panel7);
-            Controls.Add(panel6);
-            Controls.Add(panel5);
             Controls.Add(panel4);
             Controls.Add(panel3);
             Controls.Add(panel2);
@@ -317,6 +359,10 @@
             Text = "ASSETS";
             panel15.ResumeLayout(false);
             panel15.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -326,8 +372,6 @@
         private Panel panel2;
         private Panel panel3;
         private Panel panel4;
-        private Panel panel5;
-        private Panel panel6;
         private Panel panel7;
         private Panel panel8;
         private Panel panel9;
@@ -345,5 +389,10 @@
         public TextBox tbEmail;
         private Panel panel18;
         private Label lbforgotpassword;
+        private Panel panel19;
+        private Panel panel5;
+        private Label lbbutton;
+        private Panel panel6;
+        private Label label1;
     }
 }

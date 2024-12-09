@@ -16,5 +16,10 @@ namespace FISTML_CS_v0._0
         {
             InitializeComponent();
         }
+
+        private void lbbutton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

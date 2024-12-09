@@ -63,6 +63,16 @@ namespace FISTML_CS_v0._0.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _00_Button {
+            get {
+                object obj = ResourceManager.GetObject("00 Button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AboutICO {
             get {
                 object obj = ResourceManager.GetObject("AboutICO", resourceCulture);
@@ -396,6 +406,16 @@ namespace FISTML_CS_v0._0.Properties {
         internal static System.Drawing.Bitmap User_Profile_Circle__1_ {
             get {
                 object obj = ResourceManager.GetObject("User Profile Circle (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap User_Profile_Circle__2_ {
+            get {
+                object obj = ResourceManager.GetObject("User Profile Circle (2)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

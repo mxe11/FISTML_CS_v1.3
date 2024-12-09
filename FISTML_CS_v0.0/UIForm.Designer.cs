@@ -35,19 +35,18 @@
             btnLogin = new Button();
             lbUsername = new Label();
             tbUserid = new TextBox();
+            panel10 = new Panel();
+            lbfistml = new Label();
             panel1.SuspendLayout();
+            panel10.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackgroundImage = Properties.Resources.Backgroundlogin;
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
-            panel1.Controls.Add(btnRegister);
-            panel1.Controls.Add(lbPassword);
-            panel1.Controls.Add(tbpassword);
-            panel1.Controls.Add(btnLogin);
-            panel1.Controls.Add(lbUsername);
-            panel1.Controls.Add(tbUserid);
+            panel1.Controls.Add(lbfistml);
+            panel1.Controls.Add(panel10);
             panel1.Location = new Point(1, -4);
             panel1.Name = "panel1";
             panel1.Size = new Size(770, 547);
@@ -57,11 +56,10 @@
             // 
             btnRegister.BackColor = Color.RoyalBlue;
             btnRegister.FlatStyle = FlatStyle.Popup;
-            btnRegister.Location = new Point(175, 334);
+            btnRegister.Location = new Point(168, 331);
             btnRegister.Name = "btnRegister";
             btnRegister.Size = new Size(75, 23);
             btnRegister.TabIndex = 5;
-            btnRegister.Text = "Register";
             btnRegister.UseVisualStyleBackColor = false;
             // 
             // lbPassword
@@ -70,7 +68,7 @@
             lbPassword.BackColor = Color.Transparent;
             lbPassword.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbPassword.ForeColor = Color.AliceBlue;
-            lbPassword.Location = new Point(70, 247);
+            lbPassword.Location = new Point(63, 244);
             lbPassword.Name = "lbPassword";
             lbPassword.Size = new Size(79, 21);
             lbPassword.TabIndex = 4;
@@ -79,18 +77,17 @@
             // tbpassword
             // 
             tbpassword.BackColor = Color.AliceBlue;
-            tbpassword.Location = new Point(70, 271);
+            tbpassword.Location = new Point(63, 268);
             tbpassword.Name = "tbpassword";
             tbpassword.Size = new Size(180, 23);
             tbpassword.TabIndex = 3;
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(70, 334);
+            btnLogin.Location = new Point(63, 331);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(75, 23);
             btnLogin.TabIndex = 2;
-            btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
             // 
             // lbUsername
@@ -99,7 +96,7 @@
             lbUsername.BackColor = Color.Transparent;
             lbUsername.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbUsername.ForeColor = Color.AliceBlue;
-            lbUsername.Location = new Point(70, 172);
+            lbUsername.Location = new Point(63, 169);
             lbUsername.Name = "lbUsername";
             lbUsername.Size = new Size(63, 21);
             lbUsername.TabIndex = 1;
@@ -108,10 +105,38 @@
             // tbUserid
             // 
             tbUserid.BackColor = Color.AliceBlue;
-            tbUserid.Location = new Point(70, 196);
+            tbUserid.Location = new Point(63, 193);
             tbUserid.Name = "tbUserid";
             tbUserid.Size = new Size(180, 23);
             tbUserid.TabIndex = 0;
+            // 
+            // panel10
+            // 
+            panel10.BackColor = Color.Transparent;
+            panel10.BackgroundImage = Properties.Resources.Rectangle_16;
+            panel10.BackgroundImageLayout = ImageLayout.Stretch;
+            panel10.Controls.Add(tbUserid);
+            panel10.Controls.Add(lbUsername);
+            panel10.Controls.Add(btnRegister);
+            panel10.Controls.Add(btnLogin);
+            panel10.Controls.Add(lbPassword);
+            panel10.Controls.Add(tbpassword);
+            panel10.Location = new Point(0, 3);
+            panel10.Name = "panel10";
+            panel10.Size = new Size(322, 541);
+            panel10.TabIndex = 10;
+            // 
+            // lbfistml
+            // 
+            lbfistml.AutoSize = true;
+            lbfistml.BackColor = Color.Transparent;
+            lbfistml.Font = new Font("Segoe UI", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbfistml.ForeColor = Color.AliceBlue;
+            lbfistml.Location = new Point(381, 184);
+            lbfistml.Name = "lbfistml";
+            lbfistml.Size = new Size(354, 141);
+            lbfistml.TabIndex = 0;
+            lbfistml.Text = "Facial Identification \r\n   System Through \r\n  Machine Learning";
             // 
             // UIForm
             // 
@@ -123,6 +148,8 @@
             Text = "UIForm";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel10.ResumeLayout(false);
+            panel10.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -135,5 +162,7 @@
         private Button btnLogin;
         private Label lbUsername;
         private Button btnRegister;
+        private Panel panel10;
+        private Label lbfistml;
     }
 }
