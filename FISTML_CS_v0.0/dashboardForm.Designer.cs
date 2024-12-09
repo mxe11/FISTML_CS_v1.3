@@ -516,6 +516,9 @@
         private Label label4;
         private Label label2;
         private Panel panel11;
+        private Label lbattendance;
+        private Label lbstatistics;
+        private Label lbschedules;
         private Label lbemployee;
         private Label lbdash2;
         private Label lbhelpcenter;
